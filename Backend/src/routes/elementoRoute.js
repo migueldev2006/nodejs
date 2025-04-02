@@ -1,5 +1,5 @@
 import {Router} from 'express';
-import { registrarElementos, actualizarElementos, buscarElementos, cambiarEstadoElemento, listarElementos } from '../controllers/elementoController.js';
+import { registrarElementos, actualizarElementos, cambiarEstadoElemento, listarElementos } from '../controllers/elementoController.js';
 
 export const elementoRoute = Router();
 

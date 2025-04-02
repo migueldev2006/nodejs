@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { actualizarInventarios, buscarInventarios, cargarImagen, cambiarEstadoInventario, listarInventarios, registrarInventarios } from "../controllers/inventarioController.js";
+import { actualizarInventarios, cargarImagen, cambiarEstadoInventario, listarInventarios, registrarInventarios } from "../controllers/inventarioController.js";
 
 
 export const inventarioRoute = Router();

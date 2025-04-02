@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { actualizarTipoMovimiento, buscarTipoMovimiento, cambiarEstadoTipoMovimiento, listarTipoMovimiento, registrarTipoMovimiento } from "../controllers/tipoMovimientoController.js";
+import { actualizarTipoMovimiento, cambiarEstadoTipoMovimiento, listarTipoMovimiento, registrarTipoMovimiento } from "../controllers/tipoMovimientoController.js";
 
 export const tipoMovimientoRoute = Router();
 

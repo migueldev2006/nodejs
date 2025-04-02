@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { actualizarUnidadMedida, buscarUnidadMedida, cambiarEstadoUnidadMedida, listarUnidadMedida, resgistrarUnidadMedida } from "../controllers/unidadMedidaController.js";
+import { actualizarUnidadMedida, cambiarEstadoUnidadMedida, listarUnidadMedida, resgistrarUnidadMedida } from "../controllers/unidadMedidaController.js";
 
 export const unidadMedidaRoute = Router();
 

@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { actualizarRol, buscarRol, cambiarEstadoRol, listarRoles, registrarRol } from "../controllers/rolController.js";
+import { actualizarRol, cambiarEstadoRol, listarRoles, registrarRol } from "../controllers/rolController.js";
 
 export const rolRoute = Router();
 

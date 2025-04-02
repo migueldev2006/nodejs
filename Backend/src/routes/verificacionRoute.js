@@ -1,5 +1,5 @@
 import {Router} from "express";
-import { registrarVerificacion, buscarVerificacion, listarVerificaciones, actualizarVerificacion } from "../controllers/verificacionController.js";
+import { registrarVerificacion, listarVerificaciones, actualizarVerificacion } from "../controllers/verificacionController.js";
 
 export const verificacionRoute = Router();
 

@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { registrarSolicitudes, actualizarSolicitudes, buscarSolicitudes, listarSolicitudes, aceptarSolicitudes, rechazarSolicitudes } from "../controllers/solicitudController.js";
+import { registrarSolicitudes, actualizarSolicitudes, listarSolicitudes, aceptarSolicitudes, rechazarSolicitudes } from "../controllers/solicitudController.js";
 
 export const solicitudRoute = Router();
 

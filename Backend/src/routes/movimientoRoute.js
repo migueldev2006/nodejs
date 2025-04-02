@@ -1,5 +1,5 @@
 import {Router} from 'express';
-import { aceptarMovimientos, actualizarMovimientos, buscarMovimientos, cancelarMovimientos, listarMovimientos, registrarMovimientos } from '../controllers/movimientoController.js';
+import { aceptarMovimientos, actualizarMovimientos, cancelarMovimientos, listarMovimientos, registrarMovimientos } from '../controllers/movimientoController.js';
 
 export const movimientoRoute = Router();
 
