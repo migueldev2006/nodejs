@@ -17,13 +17,28 @@ import categoriasRouter from './src/routes/categoriasRoute.js'
 import rutasRoute from './src/routes/rutasRoute.js'
 import modulosRoute from './src/routes/modulosRoute.js'
 import caracterisRoute from './src/routes/caracteristicasRoute.js'
+import { elementoRoute } from './src/routes/elementoRoute.js'
+import { inventarioRoute } from './src/routes/inventarioRoute.js'
+import { movimientoRoute } from './src/routes/movimientoRoute.js'
+import { rolRoute } from './src/routes/rolRoute.js'
+import { solicitudRoute } from './src/routes/solicitudRoute.js'
+import { tipoMovimientoRoute } from './src/routes/tipoMovimientoRoute.js'
+import { unidadMedidaRoute } from './src/routes/unidadMedidaRoute.js'
+import { verificacionRoute } from './src/routes/verificacionRoute.js'
+import swaggerUI from 'swagger-ui-express';
+import fs from 'fs';
+import path from 'path';
 
+const swaggerData = JSON.parse(fs.readFileSync(path.resolve('swagger.json'), 'utf-8'));
+console.log(swaggerData)
 
 const app = express();
 app.use(cors());
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+
+app.use("/documentacion", swaggerUI.serve, swaggerUI.setup(swaggerData));
 
 app.use(cors());
 app.use(Areas);
@@ -42,6 +57,14 @@ app.use(categoriasRouter);
 app.use(rutasRoute);
 app.use(modulosRoute);
 app.use(caracterisRoute);
+app.use(elementoRoute);
+app.use(inventarioRoute);
+app.use(movimientoRoute);
+app.use(rolRoute);
+app.use(solicitudRoute);
+app.use(tipoMovimientoRoute);
+app.use(unidadMedidaRoute);
+app.use(verificacionRoute);
 
 app.listen(3000, () => {
   console.log("API activa en el servidor 3000");
