@@ -3,7 +3,7 @@ import { actualizarUnidadMedida, cambiarEstadoUnidadMedida, listarUnidadMedida, 
 
 export const unidadMedidaRoute = Router();
 
-unidadMedidaRoute.post('/unidad/register/', resgistrarUnidadMedida);
-unidadMedidaRoute.put('/unidad/update/:id_unidad', actualizarUnidadMedida);
+unidadMedidaRoute.post('/unidad/', resgistrarUnidadMedida);
+unidadMedidaRoute.put('/unidad/:id_unidad', actualizarUnidadMedida);
 unidadMedidaRoute.put('/unidad/cambiarEstado/:id_unidad', cambiarEstadoUnidadMedida);
 unidadMedidaRoute.get('/unidad/', listarUnidadMedida);  

@@ -25,6 +25,7 @@ import { solicitudRoute } from './src/routes/solicitudRoute.js'
 import { tipoMovimientoRoute } from './src/routes/tipoMovimientoRoute.js'
 import { unidadMedidaRoute } from './src/routes/unidadMedidaRoute.js'
 import { verificacionRoute } from './src/routes/verificacionRoute.js'
+import { notificaciónRoute } from "./src/routes/notificacionesRoute.js";
 import swaggerUI from 'swagger-ui-express';
 import fs from 'fs';
 import path from 'path';
@@ -34,15 +35,16 @@ const swaggerData = JSON.parse(fs.readFileSync(path.resolve('swagger.json'), 'ut
 console.log(swaggerData)
 
 const app = express();
-app.use(cors());
 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json({limit:'12mb'}));
+app.use(bodyParser.urlencoded({ extended: true, limit:'12mb'}));
 app.use(morgan());
 
 app.use("/documentacion", swaggerUI.serve, swaggerUI.setup(swaggerData));
 
 app.use(cors());
+app.use('/img', express.static(path.join(process.cwd(), 'public/img')));
+
 app.use(Areas);
 app.use(P_formacion);
 app.use(sitios);
@@ -67,6 +69,7 @@ app.use(solicitudRoute);
 app.use(tipoMovimientoRoute);
 app.use(unidadMedidaRoute);
 app.use(verificacionRoute);
+app.use(notificaciónRoute);
 
 app.listen(3000, () => {
   console.log("API activa en el servidor 3000");

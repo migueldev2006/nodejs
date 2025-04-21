@@ -3,7 +3,7 @@ import {pool} from "../database/db.js";
 export const registrarRol = async(req, res) => {
     try {
         const {nombre, estado} = req.body;
-        const sql = `INSERT INTO roles (nombre, estado) values ($1, $2)`;
+        const sql = `INSERT INTO roles (nombre, estado) values ($1, $2) RETURNING *`;
         const result = await pool.query(sql, [nombre, estado]);
         if (result.rowCount>0) {
             return res.status(201).json({message:"Rol registrado exitosamente"});

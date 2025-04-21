@@ -9,11 +9,16 @@ const storage = multer.diskStorage({
         const imagen_elemento = Date.now() + "-" + img.originalname;
       cb(null, imagen_elemento);
     },
-  });
+  });   
   
-  const upload = multer({storage:storage});
+  const upload = multer({
+    storage: storage,
+    limits: {
+      fileSize: 5 * 1024 * 1024,
+    },
+  }).single('img');
   
-  export const cargarImagen = upload.single('img');
+  export const cargarImagen = upload;
 
 export const registrarElementos = async(req, res) => {
     try {
@@ -22,7 +27,7 @@ export const registrarElementos = async(req, res) => {
         const sql = 'INSERT INTO elementos(nombre, descripcion, valor, perecedero, no_perecedero, estado, imagen_elemento, fk_unidad_medida, fk_categoria, fk_caracteristica) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)';
         const result = await pool.query(sql, [nombre, descripcion, valor, perecedero, no_perecedero, estado, imagen_elemento, fk_unidad_medida, fk_categoria, fk_caracteristica]);
         if(result.rowCount>0){
-            return res.status(201).json({message:"El elemento se ha registrado correctamente"});
+            return res.status(201).json({message:"El elemento se ha registrado correctamente", imagen_elemento:imagen_elemento});
         }else{
             return res.status(400).json({message:"No fue posible registrar el elemento"});
         }
@@ -37,8 +42,11 @@ export const actualizarElementos = async(req, res) => {
     try {
         const {id_elemento} = req.params
         const {nombre, descripcion, valor, perecedero, no_perecedero, estado,  fk_unidad_medida, fk_categoria,  fk_caracteristica} = req.body;
-        const sqlSelect = `SELECT imagen_elemento FROM inventarios WHERE id_elemento = $1`;
+        const sqlSelect = `SELECT imagen_elemento FROM elementos WHERE id_elemento = $1`;
         const resultSelect = await pool.query(sqlSelect, [id_elemento]);
+        if (resultSelect.rowCount === 0) {
+            return res.status(404).json({message: "Elemento no encontrado"});
+        }
         const imagenActual = resultSelect.rows[0].imagen_elemento;
         let nuevaImagen = imagenActual;
         if (req.file) {

@@ -1,11 +1,23 @@
 import {pool} from '../database/db.js'
+import { crearNotificacion } from './notificacionController.js';
 
 export const registrarMovimientos = async(req, res) => {
     try {
         const {descripcion, cantidad, hora_ingreso, hora_salida, aceptado, en_proceso, cancelado, devolutivo, no_devolutivo, fk_usuario, fk_tipo_movimiento, fk_sitio, fk_inventario} = req.body;
-        const sql = `INSERT INTO movimientos (descripcion, cantidad, hora_ingreso, hora_salida, aceptado, en_proceso, cancelado, devolutivo, no_devolutivo, fk_usuario, fk_tipo_movimiento, fk_sitio, fk_inventario) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)`;
+        const sql = `INSERT INTO movimientos (descripcion, cantidad, hora_ingreso, hora_salida, aceptado, en_proceso, cancelado, devolutivo, no_devolutivo, fk_usuario, fk_tipo_movimiento, fk_sitio, fk_inventario) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13) RETURNING id_movimiento`;
         const result = await pool.query(sql, [descripcion, cantidad, hora_ingreso, hora_salida, aceptado, en_proceso, cancelado, devolutivo, no_devolutivo, fk_usuario, fk_tipo_movimiento, fk_sitio, fk_inventario]);
         if (result.rowCount>0) {
+            const id_movimiento = result.rows[0].id_movimiento;
+            if (!id_movimiento) {
+                return res.status(400).json({ message: "ID del movimiento es inválido." });
+              }
+            await crearNotificacion({
+              titulo: "Nuevo movimiento pendiente",
+              mensaje: `Movimiento "${descripcion}" está pendiente de revisión.`,
+              destino: fk_usuario, 
+              id_movimiento
+            });
+      
             return res.status(201).json({message:"Se ha resgistrado el movimiento correctamente"})
         } else {
             return res.status(400).json({message:"No se logro registrar el movimiento"})
