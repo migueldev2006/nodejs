@@ -20,9 +20,9 @@ const registrar = async(req,res) =>{
 const actualizar = async(req,res) => {
     try{
         const {id} = req.params
-        const {nombre,descripcion,url_destino,fk_modulo} = req.body
-        const sql = `UPDATE rutas SET nombre = $1,descripcion = $2, url_destino = $3,fk_modulo=$4 WHERE id_ruta = $5 `
-        const result = await pool.query(sql,[nombre,descripcion,url_destino,fk_modulo,id])
+        const {nombre,descripcion,url_destino} = req.body
+        const sql = `UPDATE rutas SET nombre = $1,descripcion = $2, url_destino = $3 WHERE id_ruta = $4 `
+        const result = await pool.query(sql,[nombre,descripcion,url_destino,id])
         return res.status(200).json({msg:"Actualizado con exito"})
     }catch(error){
         console.log(error)

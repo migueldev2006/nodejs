@@ -28,6 +28,7 @@ import { verificacionRoute } from './src/routes/verificacionRoute.js'
 import swaggerUI from 'swagger-ui-express';
 import fs from 'fs';
 import path from 'path';
+import morgan from "morgan";
 
 const swaggerData = JSON.parse(fs.readFileSync(path.resolve('swagger.json'), 'utf-8'));
 console.log(swaggerData)
@@ -37,6 +38,7 @@ app.use(cors());
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(morgan());
 
 app.use("/documentacion", swaggerUI.serve, swaggerUI.setup(swaggerData));
 
