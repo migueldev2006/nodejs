@@ -18,6 +18,7 @@ const verifyToken = () => async (req, res, next) => {
         }
 
         const verified = jwt.verify(token, process.env.AUT_SECRET);
+        req.user = verified;
 
         next();
 

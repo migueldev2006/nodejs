@@ -14,10 +14,14 @@ const login = async (req, res) => {
         if (result.rows.length === 0) {
             return res.status(404).json({ message: "Usuario no encontrado" })
         }
+
         const user = result.rows[0];
         const verified = await bcrypt.compare(password, user.password)
         if (verified) {
-            const token = jwt.sign(user, process.env.AUT_SECRET)
+            const modulosSQL = `SELECT m.nombre FROM modulos m JOIN rol_modulo rm ON rm.fk_modulo = m.id_modulo JOIN usuarios u ON u.fk_rol = rm.fk_rol WHERE rm.fk_rol = u.fk_rol AND u.documento = $1`
+            const modulos = await pool.query(modulosSQL,[documento]);
+
+            const token = jwt.sign({...user,modulos : modulos.rows}, process.env.AUT_SECRET)
             return res.status(200).json({ token })
         }else{
             return res.status(400).json({msg:"Contraseña incorrecta"})
@@ -66,7 +70,7 @@ const registrar = async (req, res) => {
         const sql = "INSERT INTO usuarios(documento,nombre,apellido,edad,telefono,correo,estado,cargo,password,fk_rol) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)";
         const encryptedPassword = await bcrypt.hash(password, 10);
         const user = await pool.query(sql, [documento, nombre, apellido, edad, telefono, correo, estado, cargo, encryptedPassword,fk_rol]);
-        return res.status(201).json({msg : "Registro exitoso"})
+        return res.status(201).json(user)
     }
     catch (error) {
         console.error(error);
