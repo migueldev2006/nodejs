@@ -5,10 +5,10 @@ const  router = Router();
 
 
 
-router.get('/Fichas',Listar_Fichas)
-router.post('/Fichas',Registrar_Ficha)
-router.put('/Fichas/:id_ficha',Actualizar_Ficha)
-router.put('/Fichas/estado/:id_ficha',Desactivar_Ficha)
+router.get('/fichas',Listar_Fichas)
+router.post('/fichas',Registrar_Ficha)
+router.put('/fichas/:id_ficha',Actualizar_Ficha)
+router.put('/fichas/estado/:id_ficha',Desactivar_Ficha)
 
 
 export default router;

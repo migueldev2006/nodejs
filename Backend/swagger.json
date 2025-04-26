@@ -11,7 +11,7 @@
     "http"
   ],
   "paths": {
-    "/Areas": {
+    "/areas": {
       "get": {
         "description": "",
         "responses": {
@@ -58,12 +58,12 @@
         }
       }
     },
-    "/Areas/{id_Area}": {
+    "/areas/{id_area}": {
       "put": {
         "description": "",
         "parameters": [
           {
-            "name": "id_Area",
+            "name": "id_area",
             "in": "path",
             "required": true,
             "type": "string"
@@ -100,12 +100,12 @@
         }
       }
     },
-    "/Areas/estado/{id_Area}": {
+    "/areas/estado/{id_area}": {
       "put": {
         "description": "",
         "parameters": [
           {
-            "name": "id_Area",
+            "name": "id_area",
             "in": "path",
             "required": true,
             "type": "string"
@@ -121,7 +121,7 @@
         }
       }
     },
-    "/P.formacion": {
+    "/programaFormacion": {
       "post": {
         "description": "",
         "parameters": [
@@ -165,7 +165,7 @@
         }
       }
     },
-    "/P.formacion/{id_programa}": {
+    "/programaFormacion/{id_programa}": {
       "put": {
         "description": "",
         "parameters": [
@@ -204,7 +204,7 @@
         }
       }
     },
-    "/P.formacion/estado/{id_programa}": {
+    "/programaFormacion/estado/{id_programa}": {
       "put": {
         "description": "",
         "parameters": [
@@ -225,7 +225,7 @@
         }
       }
     },
-    "/Sitio": {
+    "/sitio": {
       "post": {
         "description": "",
         "parameters": [
@@ -278,7 +278,7 @@
         }
       }
     },
-    "/Sitio/{id_sitio}": {
+    "/sitio/{id_sitio}": {
       "put": {
         "description": "",
         "parameters": [
@@ -326,7 +326,7 @@
         }
       }
     },
-    "/Sitio/estado/{id_sitio}": {
+    "/sitio/estado/{id_sitio}": {
       "put": {
         "description": "",
         "parameters": [
@@ -347,7 +347,7 @@
         }
       }
     },
-    "/Sede": {
+    "/sede": {
       "post": {
         "description": "",
         "parameters": [
@@ -391,7 +391,7 @@
         }
       }
     },
-    "/Sede/{id_sede}": {
+    "/sede/{id_sede}": {
       "put": {
         "description": "",
         "parameters": [
@@ -430,7 +430,7 @@
         }
       }
     },
-    "/Sede/estado/{id_sede}": {
+    "/sede/estado/{id_sede}": {
       "put": {
         "description": "",
         "parameters": [
@@ -451,7 +451,7 @@
         }
       }
     },
-    "/Fichas": {
+    "/fichas": {
       "get": {
         "description": "",
         "responses": {
@@ -495,7 +495,7 @@
         }
       }
     },
-    "/Fichas/{id_ficha}": {
+    "/fichas/{id_ficha}": {
       "put": {
         "description": "",
         "parameters": [
@@ -534,7 +534,7 @@
         }
       }
     },
-    "/Fichas/estado/{id_ficha}": {
+    "/fichas/estado/{id_ficha}": {
       "put": {
         "description": "",
         "parameters": [
@@ -555,7 +555,7 @@
         }
       }
     },
-    "/UsersFichas": {
+    "/usersFichas": {
       "post": {
         "description": "",
         "parameters": [
@@ -596,7 +596,7 @@
         }
       }
     },
-    "/UsersFichas/{id_usuario_ficha}": {
+    "/usersFichas/{id_usuario_ficha}": {
       "put": {
         "description": "",
         "parameters": [
@@ -715,7 +715,7 @@
         }
       }
     },
-    "/Permisos": {
+    "/permisos": {
       "get": {
         "description": "",
         "responses": {
@@ -753,7 +753,7 @@
         }
       }
     },
-    "/Permisos/{id_permiso}": {
+    "/permisos/{id_permiso}": {
       "put": {
         "description": "",
         "parameters": [
@@ -1445,9 +1445,6 @@
                 },
                 "url_destino": {
                   "example": "any"
-                },
-                "fk_modulo": {
-                  "example": "any"
                 }
               }
             }
@@ -1656,7 +1653,7 @@
         }
       }
     },
-    "/elemento/": {
+    "/elemento": {
       "post": {
         "description": "",
         "parameters": [
@@ -1774,6 +1771,9 @@
           },
           "400": {
             "description": "Bad Request"
+          },
+          "404": {
+            "description": "Not Found"
           },
           "500": {
             "description": "Internal Server Error"
@@ -2496,7 +2496,114 @@
         }
       }
     },
-    "/verificacion/register/": {
+    "/unidad/": {
+      "post": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "nombre": {
+                  "example": "any"
+                },
+                "estado": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "get": {
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/unidad/{id_unidad}": {
+      "put": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "id_unidad",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "nombre": {
+                  "example": "any"
+                },
+                "estado": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/unidad/cambiarEstado/{id_unidad}": {
+      "put": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "id_unidad",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/verificacion/": {
       "post": {
         "description": "",
         "parameters": [
@@ -2521,7 +2628,7 @@
                 "observaciones": {
                   "example": "any"
                 },
-                "fk_inventario": {
+                "fk_sitio": {
                   "example": "any"
                 }
               }
@@ -2534,6 +2641,17 @@
           },
           "400": {
             "description": "Bad Request"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "get": {
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
           },
           "500": {
             "description": "Internal Server Error"
@@ -2572,7 +2690,7 @@
                 "observaciones": {
                   "example": "any"
                 },
-                "fk_inventario": {
+                "fk_sitio": {
                   "example": "any"
                 }
               }
@@ -2592,9 +2710,17 @@
         }
       }
     },
-    "/verificacion/": {
+    "/verificacion/{id_sitio}": {
       "get": {
         "description": "",
+        "parameters": [
+          {
+            "name": "id_sitio",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK"

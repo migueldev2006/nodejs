@@ -2,9 +2,9 @@ import {pool} from "../database/db.js";
 
 export const registrarVerificacion = async(req, res) => {
     try {
-        const {persona_encargada, persona_asignada, hora_ingreso, hora_fin, observaciones, fk_sitio} = req.body;
-        const sql = `INSERT INTO verificaciones (persona_encargada, persona_asignada, hora_ingreso, hora_fin, observaciones, fk_sitio) values ($1, $2, $3, $4, $5, $6)`;
-        const result = await pool.query(sql, [persona_encargada, persona_asignada, hora_ingreso, hora_fin, observaciones, fk_sitio]);
+        const {persona_encargada, hora_ingreso, hora_fin, observaciones, fk_sitio, fk_usuario} = req.body;
+        const sql = `INSERT INTO verificaciones (persona_encargada, hora_ingreso, hora_fin, observaciones, fk_sitio, fk_usuario) values ($1, $2, $3, $4, $5, $6)`;
+        const result = await pool.query(sql, [persona_encargada, hora_ingreso, hora_fin, observaciones, fk_sitio, fk_usuario]);
         if (result.rowCount>0) {
             return res.status(201).json({message:"Registro exitoso, Iniciando Verificacion"});
         } else {
@@ -19,9 +19,9 @@ export const registrarVerificacion = async(req, res) => {
 export const actualizarVerificacion = async(req, res) => {
     try {
         const {id_verificacion} = req.params;
-        const {persona_encargada, persona_asignada, hora_ingreso, hora_fin, observaciones, fk_sitio} = req.body;
-        const sql = `UPDATE verificaciones SET persona_encargada = $1, persona_asignada = $2, hora_ingreso = $3, hora_fin = $4, observaciones = $5, fk_sitio = $6 WHERE id_verificacion = $7 `;
-        const result = await pool.query(sql, [persona_encargada, persona_asignada, hora_ingreso, hora_fin, observaciones, fk_sitio, id_verificacion]);
+        const {persona_encargada, hora_ingreso, hora_fin, observaciones, fk_sitio, fk_usuario} = req.body;
+        const sql = `UPDATE verificaciones SET persona_encargada = $1, hora_ingreso = $2, hora_fin = $3, observaciones = $4, fk_sitio = $5, fk_usuario = $6 WHERE id_verificacion = $7 `;
+        const result = await pool.query(sql, [persona_encargada, hora_ingreso, hora_fin, observaciones, fk_sitio, fk_usuario, id_verificacion]);
         if (result.rowCount>0) {
             return res.status(201).json({message:"Se ha actualizado correctamente"});
         } else {

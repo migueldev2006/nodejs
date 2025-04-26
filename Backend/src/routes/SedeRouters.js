@@ -8,9 +8,9 @@ import {
 
 const router = Router();
 
-router.post("/Sede", Registrar_Sede);
-router.put("/Sede/:id_sede", Actualizar_Sede);
-router.get("/Sede", Listar_Sedes);
-router.put("/Sede/estado/:id_sede", Desactivar_Sede);
+router.post("/sede", Registrar_Sede);
+router.put("/sede/:id_sede", Actualizar_Sede);
+router.get("/sede", Listar_Sedes);
+router.put("/sede/estado/:id_sede", Desactivar_Sede);
 
 export default router;

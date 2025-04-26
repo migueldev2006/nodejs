@@ -8,9 +8,9 @@ import {
 
 const router = Router();
 
-router.get("/Areas", Listar_Áreas);
-router.put("/Areas/:id_Area", ActualizarArea);
-router.put("/Areas/estado/:id_Area", Desactivar_Area);
-router.post("/Areas", RegistrarArea);
+router.get("/areas", Listar_Áreas);
+router.put("/areas/:id_area", ActualizarArea);
+router.put("/areas/estado/:id_area", Desactivar_Area);
+router.post("/areas", RegistrarArea);
 
 export default router;

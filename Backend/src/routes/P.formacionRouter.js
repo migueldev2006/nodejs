@@ -8,9 +8,9 @@ import {
 
 const router = Router();
 
-router.post("/P.formacion", Registrar_Programas_de_Formación);
-router.put("/P.formacion/:id_programa", Actualizar_Programas_de_Formación);
-router.get("/P.formacion", Listar_Programas_de_Formación);
-router.put("/P.formacion/estado/:id_programa", Desactivar_Programas_de_Formación);
+router.post("/programaFormacion", Registrar_Programas_de_Formación);
+router.put("/programaFormacion/:id_programa", Actualizar_Programas_de_Formación);
+router.get("/programaFormacion", Listar_Programas_de_Formación);
+router.put("/programaFormacion/estado/:id_programa", Desactivar_Programas_de_Formación);
 
 export default router;

@@ -3,9 +3,9 @@ import {RegistrarUsersFichas, ActualizarUsersFichas, Listar_UsersFichas, } from 
 
 const router = Router();
 
-router.post("/UsersFichas",RegistrarUsersFichas)
-router.put("/UsersFichas/:id_usuario_ficha",ActualizarUsersFichas)
-router.get("/UsersFichas",Listar_UsersFichas)
+router.post("/usersFichas",RegistrarUsersFichas)
+router.put("/usersFichas/:id_usuario_ficha",ActualizarUsersFichas)
+router.get("/usersFichas",Listar_UsersFichas)
 
 
 export default router;

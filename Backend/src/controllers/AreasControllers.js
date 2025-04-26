@@ -2,10 +2,10 @@ import { pool } from "../../src/database/db.js";
 
 const RegistrarArea = async (req, res) => {
   try {
-    const { nombre, persona_encargada,estado, fk_sede } = req.body;
+    const { nombre,estado, fk_sede, fk_usuario } = req.body;
     const sql =
-      "insert into areas (nombre,persona_encargada,estado,fk_sede) Values ($1,$2,$3,$4)";
-    const result = await pool.query(sql, [nombre, persona_encargada,estado, fk_sede]);
+      "insert into areas (nombre,estado,fk_sede, fk_usuario) Values ($1,$2,$3,$4)";
+    const result = await pool.query(sql, [nombre,estado, fk_sede, fk_usuario]);
     res.status(200).json(result.rows);
   } catch (error) {
     console.log(error);
@@ -15,16 +15,16 @@ const RegistrarArea = async (req, res) => {
 
 const ActualizarArea = async (req, res) => {
   try {
-    const { nombre, persona_encargada,estado, fk_sede  } = req.body;
-    const { id_Area } = req.params;
+    const { nombre,estado, fk_sede, fk_usuario  } = req.body;
+    const { id_area } = req.params;
     const sql =
-      "update areas set nombre=$1,persona_encargada=$2,estado=$3,fk_sede=$4 where id_area=$5";
+      "update areas set nombre=$1,estado=$2,fk_sede=$3, fk_usuario=$4 where id_area=$5";
     const result = await pool.query(sql, [
       nombre,
-      persona_encargada,
       estado,
+      fk_usuario,
       fk_sede,
-      id_Area,
+      id_area,
     ]);
     res.status(200).json(result.rows);
   } catch (error) {
@@ -50,9 +50,9 @@ const Listar_Áreas = async (req, res) => {
 
 const Desactivar_Area = async (req,res)=>{
   try {
-    const {id_Area}=req.params;
+    const {id_area}=req.params;
     const sql="update areas set estado= CASE WHEN estado= false THEN true ELSE false END where id_area=$1"
-    const result= await pool.query(sql,[id_Area])
+    const result= await pool.query(sql,[id_area])
     res.status(200).json(result.rows)
   } catch (error) {
     console.log(error)

@@ -3,8 +3,8 @@ import { Listar__Permisos, Actualizar_Permisos, Registrar_Permisos} from '../con
  
 const router = Router();
 
-router.get("/Permisos", Listar__Permisos);
-router.put("/Permisos/:id_permiso", Actualizar_Permisos);
-router.post("/Permisos", Registrar_Permisos);
+router.get("/permisos", Listar__Permisos);
+router.put("/permisos/:id_permiso", Actualizar_Permisos);
+router.post("/permisos", Registrar_Permisos);
 
 export default router;
