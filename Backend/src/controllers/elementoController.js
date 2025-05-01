@@ -16,7 +16,7 @@ const storage = multer.diskStorage({
     limits: {
       fileSize: 5 * 1024 * 1024,
     },
-  }).single('img');
+  }).single('imagen_elemento');
   
   export const cargarImagen = upload;
 

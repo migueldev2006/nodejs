@@ -131,4 +131,100 @@ const listar = async (req, res) => {
     }
 }
 
-export { login,logout,listedBlack, registrar, actualizar, cambiarEstado, listar }
+// Obtener el reporte de usuarios
+// Obtener asignaciones de elementos
+// Obtener asignaciones de elementos
+export const getAsignacionesElementos = async (req, res) => {
+    try {
+      const result = await pool.query(`
+SELECT u.id_usuario, u.nombre, u.apellido, f.id_ficha, f.codigo_ficha
+FROM usuario_ficha uf
+JOIN usuarios u ON uf.fk_usuario = u.id_usuario
+JOIN fichas f ON uf.fk_ficha = f.id_ficha
+WHERE u.estado = TRUE; -- Puedes añadir más condiciones según lo necesites
+      `);
+      res.json(result.rows);
+    } catch (error) {
+      console.error("Error en getAsignacionesElementos:", error);
+      res.status(500).json({ message: "Error al obtener asignaciones.", error: error.message });
+    }
+  };
+  
+  
+ // Obtener reporte de usuarios
+export const getReporteUsuarios = async (req, res) => {
+    try {
+      const result = await pool.query(`
+SELECT 
+    u.id_usuario, 
+    u.nombre, 
+    u.apellido, 
+    s.nombre AS sede_nombre, 
+    c.nombre AS centro_nombre
+FROM 
+    usuarios u
+JOIN 
+    areas a ON u.id_usuario = a.fk_usuario
+JOIN 
+    sedes s ON a.fk_sede = s.id_sede
+JOIN 
+    centros c ON s.fk_centro = c.id_centro
+WHERE 
+    u.estado = TRUE; 
+      `);
+      res.json(result.rows);
+    } catch (error) {
+      console.error("Error en getReporteUsuarios:", error);
+      res.status(500).json({ message: "Error al obtener el reporte de usuarios.", error: error.message });
+    }
+  };
+  
+// Obtener usuarios por ficha
+export const getUsuariosPorFicha = async (req, res) => {
+    try {
+      const result = await pool.query(`
+        SELECT 
+          f.id_ficha,
+          f.codigo_ficha AS codigo,
+          COUNT(uf.fk_usuario) AS total_usuarios
+        FROM fichas f
+        LEFT JOIN usuario_ficha uf ON f.id_ficha = uf.fk_ficha
+        GROUP BY f.id_ficha, f.codigo_ficha
+        ORDER BY total_usuarios DESC
+      `);
+      res.json(result.rows);
+    } catch (error) {
+      console.error("Error en getUsuariosPorFicha:", error);
+      res.status(500).json({ message: "Error al obtener reporte de fichas.", error: error.message });
+    }
+  };
+  
+ // Obtener movimientos por usuario y elemento
+export const getMovimientosPorUsuarioElemento = async (req, res) => {
+    try {
+      const result = await pool.query(`
+        SELECT 
+          u.id_usuario,
+          u.nombre || ' ' || u.apellido AS nombre_usuario,
+          u.documento,
+          r.nombre AS rol,
+          e.id_elemento,
+          e.nombre AS nombre_elemento,
+          COUNT(m.id_movimiento) AS total_movimientos
+        FROM movimientos m
+        INNER JOIN usuarios u ON m.fk_usuario = u.id_usuario
+        INNER JOIN roles r ON u.fk_rol = r.id_rol
+        INNER JOIN inventarios i ON m.fk_inventario = i.id_inventario
+        INNER JOIN elementos e ON i.fk_elemento = e.id_elemento
+        GROUP BY u.id_usuario, u.nombre, u.documento, r.nombre, e.id_elemento, e.nombre
+        ORDER BY total_movimientos DESC
+      `);
+      res.json(result.rows);
+    } catch (error) {
+      console.error("Error en getMovimientosPorUsuarioElemento:", error);
+      res.status(500).json({ message: "Error al obtener reporte de movimientos.", error: error.message });
+    }
+  };
+  
+  
+  export { login,logout,listedBlack, registrar, actualizar, cambiarEstado, listar }

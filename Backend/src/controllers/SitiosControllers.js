@@ -76,4 +76,68 @@ const Listar_Sitios = async (req,res)=>{
     }
 }
 
-export { Registrar_Sitio,Actualizar_Sitio,Desactivar_Sitio,Listar_Sitios};
+const obtenerTopSitiosPorElementos = async (req, res) => {
+  try {
+    const query = `
+      SELECT 
+        s.id_sitio,
+        s.nombre AS nombre_sitio,
+        COUNT(i.id_inventario) AS total_elementos
+      FROM sitios s
+      JOIN inventarios i ON s.id_sitio = i.fk_sitio
+      GROUP BY s.id_sitio
+      ORDER BY total_elementos DESC
+      LIMIT 3;
+    `;
+    const { rows } = await pool.query(query);
+    res.status(200).json(rows);
+  } catch (error) {
+    console.error('Error al obtener sitios con más elementos:', error);
+    res.status(500).json({ message: 'Error interno del servidor' });
+  }
+};
+
+const obtenerAreaConMasElementos = async (req, res) => {
+  try {
+    const query = `
+      SELECT 
+        a.id_area,
+        a.nombre AS nombre_area,
+        COUNT(i.id_inventario) AS total_elementos
+      FROM areas a
+      JOIN sitios s ON s.fk_area = a.id_area
+      JOIN inventarios i ON i.fk_sitio = s.id_sitio
+      GROUP BY a.id_area
+      ORDER BY total_elementos DESC
+      LIMIT 1;
+    `;
+    const { rows } = await pool.query(query);
+    res.status(200).json(rows[0]); // devuelve solo el primero
+  } catch (error) {
+    console.error('Error al obtener el área con más elementos:', error);
+    res.status(500).json({ message: 'Error interno del servidor' });
+  }
+};
+
+const obtenerElementosPorAgotarse = async (req, res) => {
+  try {
+    const query = `
+      SELECT 
+        e.id_elemento,
+        e.nombre AS nombre_elemento,
+        i.stock
+      FROM inventarios i
+      JOIN elementos e ON e.id_elemento = i.fk_elemento
+      ORDER BY i.stock ASC
+      LIMIT 10;
+    `;
+    const { rows } = await pool.query(query);
+    res.status(200).json(rows);
+  } catch (error) {
+    console.error('Error al obtener elementos por agotarse:', error);
+    res.status(500).json({ message: 'Error interno del servidor' });
+  }
+};
+
+
+export { Registrar_Sitio,Actualizar_Sitio,Desactivar_Sitio,Listar_Sitios, obtenerTopSitiosPorElementos, obtenerAreaConMasElementos, obtenerElementosPorAgotarse};

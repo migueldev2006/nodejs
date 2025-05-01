@@ -64,3 +64,30 @@ export const listarInventarios = async(req, res) => {
         return res.status(500).json({message:"Error al consultar en el sistema"});
     }
 }
+
+    export const reporteInventario = async(req,res)=>{
+        try {
+            const { rows } = await pool.query(`
+                SELECT 
+                  e.id_elemento,
+                  e.nombre AS nombre_elemento,
+                  c.nombre AS nombre_categoria,
+                  i.stock AS cantidad,  -- Ajusta el nombre aquí
+                  um.nombre AS unidad_medida,
+                  s.nombre AS nombre_sede,
+                  si.nombre AS nombre_sitio
+                FROM inventarios i
+                INNER JOIN elementos e ON i.fk_elemento = e.id_elemento
+                INNER JOIN categorias c ON e.fk_categoria = c.id_categoria
+                INNER JOIN sitios si ON i.fk_sitio = si.id_sitio
+                INNER JOIN sedes s ON si.fk_area = s.id_sede  -- Relación con sedes desde sitios
+                INNER JOIN unidades_medida um ON e.fk_unidad_medida = um.id_unidad
+                WHERE i.estado = true;
+              `);
+              
+            res.json(rows);
+          } catch (error) {
+            console.error(error);
+            res.status(500).json({ message: 'Error al generar el reporte de inventario' });
+          }
+    }
