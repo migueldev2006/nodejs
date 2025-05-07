@@ -7,7 +7,7 @@ import sitios from './src/routes/SitiosRouters.js'
 import sedes from './src/routes/SedeRouters.js'
 import fichas from './src/routes/FichasRouters.js'
 import UsersFichas from './src/routes/usersFichasRouters.js'
-import rol_modulo from './src/routes/rol_moduloRouters.js'
+import rol_permiso from './src/routes/rol_permisoRouters.js'
 import Permisos from './src/routes/permisosRouters.js'
 import usuarioRouter from './src/routes/usuarioRoute.js'
 import centrosRouter from './src/routes/centrosRoute.js'
@@ -51,7 +51,7 @@ app.use(sitios);
 app.use(sedes);
 app.use(fichas);
 app.use(UsersFichas);
-app.use(rol_modulo);
+app.use(rol_permiso);
 app.use(Permisos);
 app.use(usuarioRouter);
 app.use(centrosRouter);

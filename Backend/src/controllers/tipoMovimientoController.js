@@ -18,9 +18,9 @@ export const registrarTipoMovimiento = async(req, res) => {
 export const actualizarTipoMovimiento = async(req, res) => {
     try {
         const {id_tipo} = req.params;
-        const {nombre, estado} = req.body;
-        const sql = `UPDATE tipo_movimientos SET nombre = $1, estado = $2 WHERE id_tipo = $3`;
-        const result = await pool.query(sql, [nombre, estado, id_tipo]);
+        const {nombre} = req.body;
+        const sql = `UPDATE tipo_movimientos SET nombre = $1 WHERE id_tipo = $2`;
+        const result = await pool.query(sql, [nombre, id_tipo]);
         if (result.rowCount>0) {
             return res.status(200).json({message:"Tipo de movimiento actualizado"});
         } else {

@@ -1,4 +1,4 @@
-import {pool} from "../database/db.js";
+import { pool } from "../database/db.js";
 
 const Registrar_Sitio = async (req, res) => {
   try {
@@ -11,7 +11,7 @@ const Registrar_Sitio = async (req, res) => {
       fk_area,
     } = req.body;
     const sql =
-      " insert into sitios (nombre,persona_encargada,ubicacion,estado,fk_tipo_sitio,fk_area)  values($1,$2,$3,$4,$5,$6)";
+      " insert into sitios (nombre,persona_encargada,ubicacion,estado,fk_tipo_sitio,fk_area) values($1,$2,$3,$4,$5,$6)";
     const result = await pool.query(sql, [
       nombre,
       persona_encargada,
@@ -27,54 +27,48 @@ const Registrar_Sitio = async (req, res) => {
   }
 };
 
-const Actualizar_Sitio = async (req,res)=>{
-    try {
-        const {nombre,
-            persona_encargada,
-            ubicacion,
-            estado,
-            fk_tipo_sitio,fk_area}= req.body;
-        const {id_sitio}= req.params
-        const sql="update sitios set  nombre=$1,persona_encargada=$2,ubicacion=$3,estado=$4,fk_tipo_sitio=$5,fk_area=$6 where id_sitio=$7";
-        const result = await pool.query(sql,[nombre,
-            persona_encargada,
-            ubicacion,
-            estado,fk_tipo_sitio,fk_area,id_sitio])
-            res.status(200).json(result.rows);
-    } catch (error) {
-        console.log(error)
-        res.status(500).json({message:"Error al actualziar sitios"})
-        
-    }
-}
+const Actualizar_Sitio = async (req, res) => {
+  try {
+    const { nombre, persona_encargada, ubicacion } = req.body;
+    const { id_sitio } = req.params;
+    const sql =
+      "update sitios set  nombre=$1,persona_encargada=$2,ubicacion=$3 where id_sitio=$4";
+    const result = await pool.query(sql, [
+      nombre,
+      persona_encargada,
+      ubicacion,
+      id_sitio,
+    ]);
+    res.status(200).json(result.rows);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Error al actualziar sitios" });
+  }
+};
 
+const Desactivar_Sitio = async (req, res) => {
+  try {
+    const { id_sitio } = req.params;
+    const sql =
+      "update sitios set estado= CASE WHEN estado = false THEN true ELSE false END where id_sitio=$1";
+    const result = await pool.query(sql, [id_sitio]);
+    res.status(200).json(result.rows);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Error al desactivar sitio" });
+  }
+};
 
-const Desactivar_Sitio = async (req,res)=>{
-    try {
-        const {id_sitio}= req.params;
-        const sql="update sitios set estado= CASE WHEN estado = false THEN true ELSE false END where id_sitio=$1";
-        const result = await pool.query(sql,[id_sitio])
-        res.status(200).json(result.rows);
-    } catch (error) {
-        console.log(error);
-        res.status(500).json({message:"Error al desactivar sitio"})
-        
-    }
-}
-
-
-
-const Listar_Sitios = async (req,res)=>{
-    try {
-        const sql="select * from sitios";
-        const result = await pool.query(sql);
-        res.status(200).json(result.rows)
-    } catch (error) {
-        console.log(error);
-        res.status(500).json({message:"Error al listar sitios"})
-        
-    }
-}
+const Listar_Sitios = async (req, res) => {
+  try {
+    const sql = "select * from sitios";
+    const result = await pool.query(sql);
+    res.status(200).json(result.rows);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Error al listar sitios" });
+  }
+};
 
 const obtenerTopSitiosPorElementos = async (req, res) => {
   try {
@@ -92,8 +86,8 @@ const obtenerTopSitiosPorElementos = async (req, res) => {
     const { rows } = await pool.query(query);
     res.status(200).json(rows);
   } catch (error) {
-    console.error('Error al obtener sitios con más elementos:', error);
-    res.status(500).json({ message: 'Error interno del servidor' });
+    console.error("Error al obtener sitios con más elementos:", error);
+    res.status(500).json({ message: "Error interno del servidor" });
   }
 };
 
@@ -114,8 +108,8 @@ const obtenerAreaConMasElementos = async (req, res) => {
     const { rows } = await pool.query(query);
     res.status(200).json(rows[0]); // devuelve solo el primero
   } catch (error) {
-    console.error('Error al obtener el área con más elementos:', error);
-    res.status(500).json({ message: 'Error interno del servidor' });
+    console.error("Error al obtener el área con más elementos:", error);
+    res.status(500).json({ message: "Error interno del servidor" });
   }
 };
 
@@ -134,10 +128,17 @@ const obtenerElementosPorAgotarse = async (req, res) => {
     const { rows } = await pool.query(query);
     res.status(200).json(rows);
   } catch (error) {
-    console.error('Error al obtener elementos por agotarse:', error);
-    res.status(500).json({ message: 'Error interno del servidor' });
+    console.error("Error al obtener elementos por agotarse:", error);
+    res.status(500).json({ message: "Error interno del servidor" });
   }
 };
 
-
-export { Registrar_Sitio,Actualizar_Sitio,Desactivar_Sitio,Listar_Sitios, obtenerTopSitiosPorElementos, obtenerAreaConMasElementos, obtenerElementosPorAgotarse};
+export {
+  Registrar_Sitio,
+  Actualizar_Sitio,
+  Desactivar_Sitio,
+  Listar_Sitios,
+  obtenerTopSitiosPorElementos,
+  obtenerAreaConMasElementos,
+  obtenerElementosPorAgotarse,
+};

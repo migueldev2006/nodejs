@@ -35,13 +35,13 @@
                 "nombre": {
                   "example": "any"
                 },
-                "persona_encargada": {
-                  "example": "any"
-                },
                 "estado": {
                   "example": "any"
                 },
                 "fk_sede": {
+                  "example": "any"
+                },
+                "fk_usuario": {
                   "example": "any"
                 }
               }
@@ -77,13 +77,13 @@
                 "nombre": {
                   "example": "any"
                 },
-                "persona_encargada": {
-                  "example": "any"
-                },
                 "estado": {
                   "example": "any"
                 },
                 "fk_sede": {
+                  "example": "any"
+                },
+                "fk_usuario": {
                   "example": "any"
                 }
               }
@@ -337,6 +337,45 @@
             "type": "string"
           }
         ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/reporte/sitio": {
+      "get": {
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/reporte/sitio/elemento": {
+      "get": {
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/reporte/sitio/agotado": {
+      "get": {
+        "description": "",
         "responses": {
           "200": {
             "description": "OK"
@@ -969,6 +1008,58 @@
             "type": "string"
           }
         ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/reporte/usuario": {
+      "get": {
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/reporte/usuario/asignacion": {
+      "get": {
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/reporte/usuarioFicha": {
+      "get": {
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/reporte/usuario/movimiento": {
+      "get": {
+        "description": "",
         "responses": {
           "200": {
             "description": "OK"
@@ -1924,6 +2015,19 @@
         }
       }
     },
+    "/reporte/inventario": {
+      "get": {
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
     "/movimiento/": {
       "post": {
         "description": "",
@@ -2616,9 +2720,6 @@
                 "persona_encargada": {
                   "example": "any"
                 },
-                "persona_asignada": {
-                  "example": "any"
-                },
                 "hora_ingreso": {
                   "example": "any"
                 },
@@ -2629,6 +2730,9 @@
                   "example": "any"
                 },
                 "fk_sitio": {
+                  "example": "any"
+                },
+                "fk_usuario": {
                   "example": "any"
                 }
               }
@@ -2678,9 +2782,6 @@
                 "persona_encargada": {
                   "example": "any"
                 },
-                "persona_asignada": {
-                  "example": "any"
-                },
                 "hora_ingreso": {
                   "example": "any"
                 },
@@ -2691,6 +2792,9 @@
                   "example": "any"
                 },
                 "fk_sitio": {
+                  "example": "any"
+                },
+                "fk_usuario": {
                   "example": "any"
                 }
               }

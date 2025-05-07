@@ -20,14 +20,12 @@ const Registrar_Programas_de_Formación = async (req, res) => {
 };
 const Actualizar_Programas_de_Formación = async (req, res) => {
   try {
-    const { nombre,estado, fk_area } = req.body;
+    const { nombre} = req.body;
     const { id_programa } = req.params;
     const sql =
-      "update programas_formacion set nombre=$1,estado=$2,  fk_area=$3 where id_programa=$4";
+      "update programas_formacion set nombre=$1 where id_programa=$2";
     const result = await pool.query(sql, [
       nombre,
-      estado,
-      fk_area,
       id_programa,
     ]);
     res.status(200).json(result.rows);

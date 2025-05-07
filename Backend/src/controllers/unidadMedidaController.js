@@ -18,9 +18,9 @@ export const resgistrarUnidadMedida = async(req, res) => {
 export const actualizarUnidadMedida = async(req, res) => {
     try {
         const {id_unidad} = req.params;
-        const {nombre, estado} = req.body;
-        const sql = `UPDATE unidades_medida SET nombre = $1, estado = $2 WHERE id_unidad = $3`;
-        const result = await pool.query(sql, [nombre, estado, id_unidad]);
+        const {nombre} = req.body;
+        const sql = `UPDATE unidades_medida SET nombre = $1 WHERE id_unidad = $2`;
+        const result = await pool.query(sql, [nombre, id_unidad]);
         if (result.rowCount>0) {
             return res.status(200).json({message:"Se ha actualizado la unidad correctamente"})
         } else {

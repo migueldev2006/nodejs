@@ -17,22 +17,22 @@ export const registrarInventarios = async(req, res) => {
     }
 }
 
-export const actualizarInventarios = async(req, res) => {
-    try {
-        const {id_inventario} = req.params;
-        const { stock, estado, fk_sitio, fk_elemento} = req.body;
-        const sql = `UPDATE inventarios SET stock = $1, estado = $2, fk_sitio = $3, fk_elemento = $4 WHERE id_inventario = $5`;
-        const result = await pool.query(sql, [ stock, estado, fk_sitio, fk_elemento, id_inventario]);
-        if (result.rowCount>0) {
-            return res.status(200).json({message:"Inventario actualizado"});
-        } else {
-            return res.status(400).json({message:"No se logro realizar la actualizacion"});
-        }
-    } catch (error) {
-        console.log("Error al actualizar el inventario en el sistema "+error.message);
-        return res.status(500).json({message:"Error al actualizar el inventario en el sistema"});
-    }
-}
+// export const actualizarInventarios = async(req, res) => {
+//     try {
+//         const {id_inventario} = req.params;
+//         const { stock, estado, fk_sitio, fk_elemento} = req.body;
+//         const sql = `UPDATE inventarios SET stock = $1, estado = $2, fk_sitio = $3, fk_elemento = $4 WHERE id_inventario = $5`;
+//         const result = await pool.query(sql, [ stock, estado, fk_sitio, fk_elemento, id_inventario]);
+//         if (result.rowCount>0) {
+//             return res.status(200).json({message:"Inventario actualizado"});
+//         } else {
+//             return res.status(400).json({message:"No se logro realizar la actualizacion"});
+//         }
+//     } catch (error) {
+//         console.log("Error al actualizar el inventario en el sistema "+error.message);
+//         return res.status(500).json({message:"Error al actualizar el inventario en el sistema"});
+//     }
+// }
 
 export const cambiarEstadoInventario = async(req, res) => {
     try {

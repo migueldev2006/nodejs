@@ -3,9 +3,9 @@ import { crearNotificacion } from './notificacionController.js';
 
 export const registrarMovimientos = async(req, res) => {
     try {
-        const {descripcion, cantidad, hora_ingreso, hora_salida, aceptado, en_proceso, cancelado, devolutivo, no_devolutivo, fk_usuario, fk_tipo_movimiento, fk_sitio, fk_inventario} = req.body;
-        const sql = `INSERT INTO movimientos (descripcion, cantidad, hora_ingreso, hora_salida, aceptado, en_proceso, cancelado, devolutivo, no_devolutivo, fk_usuario, fk_tipo_movimiento, fk_sitio, fk_inventario) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13) RETURNING id_movimiento`;
-        const result = await pool.query(sql, [descripcion, cantidad, hora_ingreso, hora_salida, aceptado, en_proceso, cancelado, devolutivo, no_devolutivo, fk_usuario, fk_tipo_movimiento, fk_sitio, fk_inventario]);
+        const {descripcion, cantidad, hora_ingreso, hora_salida, aceptado, en_proceso, cancelado, devolutivo, no_devolutivo, fecha_devolucion, fk_usuario, fk_tipo_movimiento, fk_sitio, fk_inventario} = req.body;
+        const sql = `INSERT INTO movimientos (descripcion, cantidad, hora_ingreso, hora_salida, aceptado, en_proceso, cancelado, devolutivo, no_devolutivo, fecha_devolucion, fk_usuario, fk_tipo_movimiento, fk_sitio, fk_inventario) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14) RETURNING id_movimiento`;
+        const result = await pool.query(sql, [descripcion, cantidad, hora_ingreso, hora_salida, aceptado, en_proceso, cancelado, devolutivo, no_devolutivo, fecha_devolucion, fk_usuario, fk_tipo_movimiento, fk_sitio, fk_inventario]);
         if (result.rowCount>0) {
             const id_movimiento = result.rows[0].id_movimiento;
             if (!id_movimiento) {
@@ -30,9 +30,9 @@ export const registrarMovimientos = async(req, res) => {
 export const actualizarMovimientos = async(req, res) => {
     try {
         const {id_movimiento} = req.params;
-        const {descripcion, cantidad, hora_ingreso, hora_salida, aceptado, en_proceso, cancelado, devolutivo, no_devolutivo, fk_usuario, fk_tipo_movimiento, fk_sitio, fk_inventario} = req.body;
-        const sql = `UPDATE movimientos SET descripcion = $1, cantidad = $2, hora_ingreso = $3, hora_salida = $4, aceptado = $5, en_proceso = $6, cancelado = $7, devolutivo = $8, no_devolutivo = $9, fk_usuario = $10, fk_tipo_movimiento = $11, fk_sitio = $12, fk_inventario = $13 WHERE id_movimiento = $14`;
-        const result = await pool.query(sql, [descripcion, cantidad, hora_ingreso, hora_salida, aceptado, en_proceso, cancelado, devolutivo, no_devolutivo, fk_usuario, fk_tipo_movimiento, fk_sitio, fk_inventario, id_movimiento]);
+        const {descripcion, cantidad, hora_ingreso, hora_salida} = req.body;
+        const sql = `UPDATE movimientos SET descripcion = $1, cantidad = $2, hora_ingreso = $3, hora_salida = $4 WHERE id_movimiento = $5`;
+        const result = await pool.query(sql, [descripcion, cantidad, hora_ingreso, hora_salida, id_movimiento]);
         if (result.rowCount>0) {
             return res.status(200).json({message:"Movimiento actualizado"})
         } else {

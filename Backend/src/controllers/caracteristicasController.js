@@ -3,9 +3,9 @@ import { pool } from "../database/db.js";
 
 const registrar = async(req,res) =>{
     try{
-        const {nombre} = req.body
-        const sql = "INSERT INTO caracteristicas(nombre) VALUES($1)"
-        const result = await pool.query(sql,[nombre])
+        const {nombre, codigo, fk_elemento} = req.body
+        const sql = "INSERT INTO caracteristicas(nombre, codigo, fk_elemento) VALUES($1, $2, $3)"
+        const result = await pool.query(sql,[nombre, codigo, fk_elemento])
         return res.status(200).json({msg:"Caracteristica registrada exitosamente"})
     }catch(error){
         console.log(error)
@@ -17,9 +17,9 @@ const registrar = async(req,res) =>{
 const actualizar = async(req,res) =>{
     try{
         const {id} = req.params
-        const {nombre} = req.body 
+        const {nombre, codigo} = req.body 
         const sql = `UPDATE caracteristicas SET nombre = $1 WHERE id_caracteristica = $5`
-        const result = await pool.query(sql,[nombre,id])
+        const result = await pool.query(sql,[nombre, codigo, id])
         return res.status(200).json({msg:"Actualizado con exito"})
     }catch(error){
         console.log(error)

@@ -19,9 +19,9 @@ export const registrarRol = async(req, res) => {
 export const actualizarRol = async(req, res) => {
     try {
         const {id_rol} = req.params;
-        const {nombre, estado} = req.body;
-        const sql = `UPDATE roles SET nombre = $1, estado = $2 WHERE id_rol = $3 `;
-        const result = await pool.query(sql, [nombre, estado, id_rol]);
+        const {nombre} = req.body;
+        const sql = `UPDATE roles SET nombre = $1 WHERE id_rol = $2 `;
+        const result = await pool.query(sql, [nombre, id_rol]);
         if (result.rowCount>0) {
             return res.status(200).json({message:"El rol se ha actualizado correctamente"});
         } else {

@@ -15,15 +15,12 @@ const RegistrarArea = async (req, res) => {
 
 const ActualizarArea = async (req, res) => {
   try {
-    const { nombre,estado, fk_sede, fk_usuario  } = req.body;
+    const { nombre  } = req.body;
     const { id_area } = req.params;
     const sql =
-      "update areas set nombre=$1,estado=$2,fk_sede=$3, fk_usuario=$4 where id_area=$5";
+      "update areas set nombre=$1 where id_area=$2";
     const result = await pool.query(sql, [
       nombre,
-      estado,
-      fk_usuario,
-      fk_sede,
       id_area,
     ]);
     res.status(200).json(result.rows);

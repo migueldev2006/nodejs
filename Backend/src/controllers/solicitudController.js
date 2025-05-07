@@ -18,9 +18,9 @@ export const registrarSolicitudes = async(req, res) => {
 export const actualizarSolicitudes = async(req, res) => {
     try {
         const {id_solicitud} = req.params
-        const {descripcion, cantidad, aceptada, pendiente, rechazada, fk_usuario, fk_inventario} = req.body;
-        const sql = `UPDATE solicitudes SET descripcion = $1, cantidad = $2, aceptada = $3, pendiente = $4, rechazada = $5, fk_usuario = $6, fk_inventario = $7 WHERE id_solicitud = $8 `;
-        const result = await pool.query(sql, [descripcion, cantidad, aceptada, pendiente, rechazada, fk_usuario, fk_inventario, id_solicitud]);
+        const {descripcion, cantidad} = req.body;
+        const sql = `UPDATE solicitudes SET descripcion = $1, cantidad = $2 WHERE id_solicitud = $3 `;
+        const result = await pool.query(sql, [descripcion, cantidad, id_solicitud]);
         if (result.rowCount>0) {
             return res.status(200).json({message:"Solicitud actualizada exitosamente"})
         } else {

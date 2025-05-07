@@ -2,10 +2,10 @@ import { pool } from "../../src/database/db.js";
 
 const Registrar_Permisos = async (req, res) => {
   try {
-    const { permiso } = req.body;
+    const { permiso, fk_modulo } = req.body;
     const sql =
-      "insert into permisos (permiso) Values ($1)";
-    const result = await pool.query(sql, [permiso]);
+      "insert into permisos (permiso, fk_modulo) Values ($1, $2)";
+    const result = await pool.query(sql, [permiso, fk_modulo]);
     res.status(200).json(result.rows);
   } catch (error) {
     console.log(error);

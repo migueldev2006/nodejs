@@ -18,10 +18,8 @@ const login = async (req, res) => {
         const user = result.rows[0];
         const verified = await bcrypt.compare(password, user.password)
         if (verified) {
-            const modulosSQL = `SELECT m.nombre FROM modulos m JOIN rol_modulo rm ON rm.fk_modulo = m.id_modulo JOIN usuarios u ON u.fk_rol = rm.fk_rol WHERE rm.fk_rol = u.fk_rol AND u.documento = $1`
-            const modulos = await pool.query(modulosSQL,[documento]);
 
-            const token = jwt.sign({...user,modulos : modulos.rows}, process.env.AUT_SECRET)
+            const token = jwt.sign({...user}, process.env.AUT_SECRET)
             return res.status(200).json({ token })
         }else{
             return res.status(400).json({msg:"Contraseña incorrecta"})

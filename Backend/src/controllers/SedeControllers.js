@@ -15,10 +15,10 @@ const Registrar_Sede = async (req,res)=>{
 
 const Actualizar_Sede = async (req,res)=>{
     try {
-        const {nombre,estado,fk_centro} = req.body
+        const {nombre} = req.body
         const {id_sede}= req.params;
-        const sql = "update sedes set  nombre=$1,estado=$2,fk_centro=$3 where id_sede=$4";
-        const result = await pool.query(sql,[nombre,estado,fk_centro,id_sede]);
+        const sql = "update sedes set  nombre=$1 where id_sede=$2";
+        const result = await pool.query(sql,[nombre, id_sede]);
         res.status(200).json(result.rows)
     } catch (error) {
         console.log(error);

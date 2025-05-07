@@ -25,15 +25,11 @@ const Actualizar_Ficha = async (req, res) => {
   try {
     const {
       codigo_ficha,
-      estado,
-      fk_programa,
     } = req.body;
     const { id_ficha } = req.params;
-    const sql="update fichas set codigo_ficha=$1,estado=$2,fk_programa=$3 where id_ficha=$4"
+    const sql="update fichas set codigo_ficha=$1 where id_ficha=$2"
     const result = await pool.query(sql, [
       codigo_ficha,
-      estado,
-      fk_programa,
       id_ficha,
     ]);
     res.status(200).json(result.rows);

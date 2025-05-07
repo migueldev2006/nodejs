@@ -22,12 +22,12 @@ const storage = multer.diskStorage({
 
 export const registrarElementos = async(req, res) => {
     try {
-        const {nombre, descripcion, valor, perecedero, no_perecedero, estado,  fk_unidad_medida, fk_categoria, fk_caracteristica} = req.body;
+        const {nombre, descripcion, valor, perecedero, no_perecedero, estado, fecha_vencimiento, fecha_uso, fk_unidad_medida, fk_categoria} = req.body;
         const imagen_elemento = req.file.filename;;
-        const sql = 'INSERT INTO elementos(nombre, descripcion, valor, perecedero, no_perecedero, estado, imagen_elemento, fk_unidad_medida, fk_categoria, fk_caracteristica) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)';
-        const result = await pool.query(sql, [nombre, descripcion, valor, perecedero, no_perecedero, estado, imagen_elemento, fk_unidad_medida, fk_categoria, fk_caracteristica]);
+        const sql = 'INSERT INTO elementos(nombre, descripcion, valor, perecedero, no_perecedero, estado, fecha_vencimiento, fecha_uso, imagen_elemento, fk_unidad_medida, fk_categoria) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11) RETURNING id_elemento';
+        const result = await pool.query(sql, [nombre, descripcion, valor, perecedero, no_perecedero, estado, fecha_vencimiento, fecha_uso, imagen_elemento, fk_unidad_medida, fk_categoria]);
         if(result.rowCount>0){
-            return res.status(201).json({message:"El elemento se ha registrado correctamente", imagen_elemento:imagen_elemento});
+            return res.status(201).json({message:"El elemento se ha registrado correctamente", id_elemento:result.rows[0].id_elemento, imagen_elemento:imagen_elemento});
         }else{
             return res.status(400).json({message:"No fue posible registrar el elemento"});
         }
@@ -41,7 +41,7 @@ export const registrarElementos = async(req, res) => {
 export const actualizarElementos = async(req, res) => {
     try {
         const {id_elemento} = req.params
-        const {nombre, descripcion, valor, perecedero, no_perecedero, estado,  fk_unidad_medida, fk_categoria,  fk_caracteristica} = req.body;
+        const {nombre, descripcion, valor} = req.body;
         const sqlSelect = `SELECT imagen_elemento FROM elementos WHERE id_elemento = $1`;
         const resultSelect = await pool.query(sqlSelect, [id_elemento]);
         if (resultSelect.rowCount === 0) {
@@ -52,8 +52,8 @@ export const actualizarElementos = async(req, res) => {
         if (req.file) {
             nuevaImagen = req.file.filename;
         }
-        const sql = "UPDATE elementos SET nombre = $1, descripcion = $2, valor = $3, perecedero = $4, no_perecedero = $5, estado = $6, imagen_elemento = $7, fk_unidad_medida = $8, fk_categoria = $9, fk_caracteristica = $10 WHERE id_elemento = $11";
-        const result = await pool.query(sql, [nombre, descripcion, valor, perecedero, no_perecedero, estado, nuevaImagen, fk_unidad_medida, fk_categoria, fk_caracteristica, id_elemento]);
+        const sql = "UPDATE elementos SET nombre = $1, descripcion = $2, valor = $3, imagen_elemento = $4 WHERE id_elemento = $5";
+        const result = await pool.query(sql, [nombre, descripcion, valor, nuevaImagen, id_elemento]);
         if (result.rowCount>0) {
             return res.status(200).json({message:"Se actualizo el elemento correctamente"});
         }else{
