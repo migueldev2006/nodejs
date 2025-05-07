@@ -8,15 +8,7 @@ export const registrarMovimientos = async(req, res) => {
         const result = await pool.query(sql, [descripcion, cantidad, hora_ingreso, hora_salida, aceptado, en_proceso, cancelado, devolutivo, no_devolutivo, fecha_devolucion, fk_usuario, fk_tipo_movimiento, fk_sitio, fk_inventario]);
         if (result.rowCount>0) {
             const id_movimiento = result.rows[0].id_movimiento;
-            if (!id_movimiento) {
-                return res.status(400).json({ message: "ID del movimiento es inválido." });
-              }
-            await crearNotificacion({
-              titulo: "Nuevo movimiento pendiente",
-              mensaje: `Movimiento "${descripcion}" está pendiente de revisión.`,
-              destino: fk_usuario, 
-              id_movimiento
-            });
+           
       
             return res.status(201).json({message:"Se ha resgistrado el movimiento correctamente"})
         } else {
@@ -85,6 +77,52 @@ export const listarMovimientos = async(req, res) => {
         }
     } catch (error) {
         console.log("Error al consultar en el sistema "+error.message);
+        return res.status(500).json({message:"Error al consultar en el sistema"});
+    }
+}
+
+
+export const masUsados = async(req,res)=>{
+    try {
+        const sql = `SELECT e.nombre, SUM(m.cantidad) AS total_usos FROM movimientos m 
+        JOIN inventarios i ON m.fk_inventario = i.id_inventario
+        JOIN elementos e ON i.fk_elemento = e.id_elemento
+        GROUP BY e.nombre
+        ORDER BY total_usos DESC
+        LIMIT 10;
+`
+        const result = await pool.query(sql);
+        if (result.rowCount === 0) {
+            return res.status(200).json([])
+        } else {
+            return res.status(200).json(result.rows);
+        }
+    } catch (error) {
+        console.log("Error al consultar en el sistema "+error.message);
+        return res.status(500).json({message:"Error al consultar en el sistema"});
+    }
+}
+
+
+export const movimientosMensuales = async(req,res) => {
+    try{
+        const sql = `SELECT 
+        tm.nombre AS tipo_movimiento,
+        DATE_TRUNC('month', m.created_at) AS mes,
+        COUNT(*) AS total
+        FROM movimientos m
+        JOIN tipo_movimientos tm ON m.fk_tipo_movimiento = tm.id_tipo
+        GROUP BY tipo_movimiento, mes
+        ORDER BY mes DESC
+        `
+        const result = await pool.query(sql);
+        if (result.rowCount === 0) {
+            return res.status(200).json([])
+        } else {
+            return res.status(200).json(result.rows);
+        }
+    } catch (error) {
+        console.log("Error al consultar los movimientos mensuales en el sistema "+error.message);
         return res.status(500).json({message:"Error al consultar en el sistema"});
     }
 }

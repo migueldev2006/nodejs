@@ -21,8 +21,8 @@ const actualizar = async(req,res) =>{
     try{
         const {id} = req.params
         const {nombre, fk_municipio} = req.body
-        const sql = `UPDATE centros SET nombre = $1, fk_municipio = $2 WHERE id_centro = $3 `
-        const result = await pool.query(sql,[nombre,fk_municipio,id])
+        const sql = `UPDATE centros SET nombre = $1 WHERE id_centro = $2 `
+        const result = await pool.query(sql,[nombre,id])
         return res.status(200).json({msg:"Actualizado con exito"})
     }catch(error){
         console.log(error)
