@@ -25,7 +25,7 @@ import { solicitudRoute } from './src/routes/solicitudRoute.js'
 import { tipoMovimientoRoute } from './src/routes/tipoMovimientoRoute.js'
 import { unidadMedidaRoute } from './src/routes/unidadMedidaRoute.js'
 import { verificacionRoute } from './src/routes/verificacionRoute.js'
-//import { notificaciónRoute } from "./src/routes/notificacionesRoute.js";
+import { notificaciónRoute } from "./src/routes/notificacionesRoute.js";
 import swaggerUI from 'swagger-ui-express';
 import fs from 'fs';
 import path from 'path';
@@ -69,7 +69,7 @@ app.use(solicitudRoute);
 app.use(tipoMovimientoRoute);
 app.use(unidadMedidaRoute);
 app.use(verificacionRoute);
-//app.use(notificaciónRoute);
+app.use(notificaciónRoute);
 
 app.listen(3000, () => {
   console.log("API activa en el servidor 3000");

@@ -9,8 +9,18 @@ export const registrarMovimientos = async(req, res) => {
         if (result.rowCount>0) {
             const id_movimiento = result.rows[0].id_movimiento;
            
+            await crearNotificacion({
+                titulo: 'Nuevo movimiento pendiente',
+                mensaje: 'Hay un nuevo movimiento que requiere revisión',
+                fk_movimiento: id_movimiento,
+                en_proceso: true,
+                aceptado: false,
+                cancelado: false,
+                destino:fk_usuario,
+                id_movimiento
+            });
       
-            return res.status(201).json({message:"Se ha resgistrado el movimiento correctamente"})
+            return res.status(201).json({message:"Se ha resgistrado el movimiento correctamente", movimiento:id_movimiento})
         } else {
             return res.status(400).json({message:"No se logro registrar el movimiento"})
         }

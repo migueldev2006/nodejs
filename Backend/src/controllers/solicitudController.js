@@ -1,4 +1,5 @@
 import { pool } from "../database/db.js";
+import { crearNotificacion } from './notificacionController.js'; 
 
 export const registrarSolicitudes = async(req, res) => {
     try {
@@ -6,12 +7,26 @@ export const registrarSolicitudes = async(req, res) => {
         const sql = `INSERT INTO solicitudes (descripcion, cantidad, aceptada, pendiente, rechazada, fk_usuario, fk_inventario) VALUES ($1, $2, $3, $4, $5, $6, $7)`;
         const result = await pool.query(sql, [descripcion, cantidad, aceptada, pendiente, rechazada, fk_usuario, fk_inventario]);
         if (result.rowCount>0) {
-            return res.status(201).json({message:"Solicitud registrada exitosamente"})
+            const id_solicitud = result.rows[0].id_solicitud;
+            
+
+            await crearNotificacion({
+                titulo: 'Nueva solicitud',
+                mensaje: 'Se ha registrado una nueva solicitud.',
+                fk_solicitud: id_solicitud,
+                pendiente: true,
+                aceptada: false,
+                rechazada: false,
+                destino:fk_usuario,
+                id_solicitud
+              });
+
+            return res.status(201).json({message:"Solicitud registrada exitosamente", solicitud:id_solicitud})
         } else {
             return res.status(400).json({message:"No se logro realizar la solicitud"})
         }
     } catch (error) {
-        console.log("Error al registrar una solicitud en el sistema");
+        console.log("Error al registrar una solicitud en el sistema"+error.message);
         return res.status(500).json({message:"Error al registrar una solicitud en el sistema"});
     }
 }

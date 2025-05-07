@@ -4,7 +4,7 @@ import { obtenerNotificaciones, marcarNotificacionLeida, crearNotificacion, resp
 export const notificaciónRoute = Router();
 
 notificaciónRoute.get('/notificaciones', obtenerNotificaciones); 
-notificaciónRoute.post('/notificaciones/:id/leida', marcarNotificacionLeida); 
+notificaciónRoute.post('/notificaciones/:id/leido', marcarNotificacionLeida); 
 notificaciónRoute.post('/notificaciones', crearNotificacion); 
 notificaciónRoute.post('/notificaciones/:id_notificacion', responderNotificacion); 
 
