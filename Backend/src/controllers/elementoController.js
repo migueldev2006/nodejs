@@ -101,6 +101,7 @@ export const listarElementos = async (req, res) => {
 export const elementosUso = async (req, res) => {
     try {
         const sql = `SELECT 
+    a.nombre AS area,
     e.nombre AS elemento,
     SUM(i.stock) AS stock_total,
     COALESCE(SUM(m.cantidad), 0) AS total_usado,
@@ -113,9 +114,13 @@ export const elementosUso = async (req, res) => {
     ) AS indice_uso
 FROM elementos e
 JOIN inventarios i ON e.id_elemento = i.fk_elemento
+JOIN sitios s ON i.fk_sitio = s.id_sitio
+JOIN areas a ON s.fk_area = a.id_area
 LEFT JOIN movimientos m ON i.id_inventario = m.fk_inventario AND m.aceptado = TRUE
-GROUP BY e.nombre
-ORDER BY indice_uso ASC;
+GROUP BY a.nombre, e.nombre
+ORDER BY a.nombre, indice_uso ASC;
+
+
 `
         const result = await pool.query(sql);
         if (result.rowCount === 0) {

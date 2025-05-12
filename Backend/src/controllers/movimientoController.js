@@ -107,13 +107,19 @@ export const masUsados = async(req,res)=>{
 export const movimientosMensuales = async(req,res) => {
     try{
         const sql = `SELECT 
-        tm.nombre AS tipo_movimiento,
-        DATE_TRUNC('month', m.created_at) AS mes,
-        COUNT(*) AS total
-        FROM movimientos m
-        JOIN tipo_movimientos tm ON m.fk_tipo_movimiento = tm.id_tipo
-        GROUP BY tipo_movimiento, mes
-        ORDER BY mes DESC
+  tm.nombre AS tipo_movimiento,
+  DATE_TRUNC('month', m.created_at) AS mes,
+  a.nombre AS area,
+  e.nombre AS elemento,
+  COUNT(*) AS total
+FROM movimientos m
+JOIN tipo_movimientos tm ON m.fk_tipo_movimiento = tm.id_tipo
+JOIN inventarios i ON m.fk_inventario = i.id_inventario
+JOIN elementos e ON i.fk_elemento = e.id_elemento
+JOIN sitios s ON i.fk_sitio = s.id_sitio
+JOIN areas a ON s.fk_area = a.id_area
+GROUP BY tipo_movimiento, mes, area, elemento
+ORDER BY mes DESC;
         `
         const result = await pool.query(sql);
         if (result.rowCount === 0) {
