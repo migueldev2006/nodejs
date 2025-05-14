@@ -120,7 +120,6 @@ LEFT JOIN movimientos m ON i.id_inventario = m.fk_inventario AND m.aceptado = TR
 GROUP BY a.nombre, e.nombre
 ORDER BY a.nombre, indice_uso ASC;
 
-
 `
         const result = await pool.query(sql);
         if (result.rowCount === 0) {

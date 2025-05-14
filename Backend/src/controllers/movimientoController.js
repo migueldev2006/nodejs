@@ -84,12 +84,18 @@ export const listarMovimientos = async(req, res) => {
 
 export const masUsados = async(req,res)=>{
     try {
-        const sql = `SELECT e.nombre, SUM(m.cantidad) AS total_usos FROM movimientos m 
-        JOIN inventarios i ON m.fk_inventario = i.id_inventario
-        JOIN elementos e ON i.fk_elemento = e.id_elemento
-        GROUP BY e.nombre
-        ORDER BY total_usos DESC
-        LIMIT 10;
+        const sql = `SELECT 
+    a.nombre AS area,
+    e.nombre AS nombre,
+    COALESCE(SUM(m.cantidad), 0) AS total_usos
+FROM elementos e
+JOIN inventarios i ON e.id_elemento = i.fk_elemento
+JOIN sitios s ON i.fk_sitio = s.id_sitio
+JOIN areas a ON s.fk_area = a.id_area
+LEFT JOIN movimientos m ON i.id_inventario = m.fk_inventario AND m.aceptado = TRUE
+GROUP BY a.nombre, e.nombre
+ORDER BY a.nombre, total_usos DESC;
+
 `
         const result = await pool.query(sql);
         if (result.rowCount === 0) {
