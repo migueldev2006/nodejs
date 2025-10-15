@@ -128,3 +128,153 @@ ORDER BY indice_uso ASC;
         return res.status(500).json({ message: "Error al consultar en el sistema" });
     }
 }
+
+export const elementosPrestados = async (req, res) => {
+    try {
+        const sql = `
+        SELECT 
+            u.nombre AS nombre_usuario,
+            e.nombre AS nombre_elemento,
+            SUM(m.cantidad) AS total_prestado,
+            MAX(m.created_at) AS fecha_prestamo
+        FROM 
+            movimientos m
+        JOIN 
+            inventarios i ON m.fk_inventario = i.id_inventario
+        JOIN 
+            elementos e ON i.fk_elemento = e.id_elemento
+        JOIN 
+            usuarios u ON m.fk_usuario = u.id_usuario
+        JOIN 
+            tipo_movimientos tm ON m.fk_tipo_movimiento = tm.id_tipo
+        WHERE 
+            tm.nombre ILIKE 'Prestamo'
+        GROUP BY 
+            u.nombre, e.nombre
+        ORDER BY 
+            u.nombre, e.nombre;
+        `;
+
+        const result = await pool.query(sql);
+        return res.status(200).json(result.rows);
+    } catch (error) {
+        console.log("Error al consultar los prestamos: " + error.message);
+        return res.status(500).json({ message: "Error al consultar los prestamos" });
+    }
+};
+
+
+export const elementosDadosBaja = async (req, res) => {
+    try {
+        const sql = `
+        SELECT 
+            e.id_elemento,
+            e.nombre AS nombre_elemento,
+            e.descripcion,
+            e.valor,
+            e.estado,
+            e.created_at AS fecha_baja,
+            e.updated_at,
+            u.nombre AS usuario_que_dio_baja,
+            tm.nombre AS tipo_movimiento
+        FROM 
+            elementos e
+        JOIN 
+            inventarios i ON i.fk_elemento = e.id_elemento
+        JOIN 
+            movimientos m ON m.fk_inventario = i.id_inventario
+        JOIN 
+            usuarios u ON u.id_usuario = m.fk_usuario
+        JOIN 
+            tipo_movimientos tm ON tm.id_tipo = m.fk_tipo_movimiento
+        WHERE 
+            e.estado = false
+            AND tm.nombre ILIKE 'Baja'
+        ORDER BY 
+            e.updated_at DESC;
+        `;
+
+        const result = await pool.query(sql);
+        return res.status(200).json(result.rows);
+    } catch (error) {
+        console.log("Error al consultar los elementos dados de baja: " + error.message);
+        return res.status(500).json({ message: "Error al consultar los elementos dados de baja" });
+    }
+};
+
+
+export const salidaIngresoElementos = async (req, res) => {
+    try {
+        const sql = `
+        SELECT 
+            e.nombre AS nombre_elemento,
+            tm.nombre AS tipo_movimiento,
+            m.cantidad,
+            m.created_at AS fecha_movimiento,
+            m.hora_ingreso,
+            m.hora_salida,
+            u.nombre AS usuario,
+            CASE 
+                WHEN tm.nombre ILIKE 'Ingreso' THEN s.nombre
+                WHEN tm.nombre ILIKE 'Salida' THEN m.destino
+                ELSE 'N/A'
+            END AS lugar_destino
+        FROM 
+            movimientos m
+        JOIN 
+            inventarios i ON m.fk_inventario = i.id_inventario
+        JOIN 
+            elementos e ON i.fk_elemento = e.id_elemento
+        JOIN 
+            usuarios u ON m.fk_usuario = u.id_usuario
+        JOIN 
+            tipo_movimientos tm ON m.fk_tipo_movimiento = tm.id_tipo
+        LEFT JOIN 
+            sitios s ON m.fk_sitio = s.id_sitio
+        WHERE 
+            tm.nombre ILIKE 'Ingreso' OR tm.nombre ILIKE 'Salida'
+        ORDER BY 
+            m.created_at DESC;
+        `;
+
+        const result = await pool.query(sql);
+        return res.status(200).json(result.rows);
+    } catch (error) {
+        console.log("Error al realizar la consulta: " + error.message);
+        return res.status(500).json({ message: "Error al realizar la consulta" });
+    }
+};
+
+
+export const elementosCaducados = async (req, res) => {
+    try {
+        const sql = `SELECT 
+            e.nombre,
+            e.descripcion,
+            e.fecha_vencimiento,
+            e.perecedero,
+            i.stock,
+            s.nombre AS sitio,
+            e.created_at
+        FROM 
+            elementos e
+        JOIN 
+            inventarios i ON e.id_elemento = i.fk_elemento  
+        JOIN 
+            sitios s ON i.fk_sitio = s.id_sitio
+        ORDER BY 
+            e.fecha_vencimiento ASC;
+        `;
+        
+        const result = await pool.query(sql);
+        
+        if (result.rowCount > 0) {
+            return res.status(200).json(result.rows);
+        } else {
+            return res.status(200).json([]);
+        }
+    } catch (error) {
+        console.log("Error al consultar los elementos caducados: " + error.message);
+        return res.status(500).json({ message: "Error al consultar los elementos caducados" });
+    }
+};

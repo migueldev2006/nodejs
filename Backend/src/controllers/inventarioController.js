@@ -3,34 +3,55 @@ import { pool } from "../database/db.js";
 export const registrarInventarios = async (req, res) => {
   try {
     const { stock, estado, fk_sitio, fk_elemento } = req.body;
-    const sql = `INSERT INTO inventarios (stock, estado, fk_sitio, fk_elemento) VALUES ($1, $2, $3, $4)`;
-    const result = await pool.query(sql, [
-      stock,
-      estado,
-      fk_sitio,
-      fk_elemento,
-    ]);
-    if (result.rowCount > 0) {
-      return res
-        .status(201)
-        .json({ message: "Elemento agregado correctamente al inventario" });
+
+    // Obtener la categoría del elemento que se quiere agregar
+    const categoriaQuery = `SELECT fk_categoria FROM elementos WHERE id_elemento = $1`;
+    const categoriaResult = await pool.query(categoriaQuery, [fk_elemento]);
+
+    if (categoriaResult.rowCount === 0) {
+      return res.status(404).json({ message: "Elemento no encontrado" });
+    }
+
+    const categoria = categoriaResult.rows[0].fk_categoria;
+
+    // Verificar si ya hay un inventario con un elemento de la misma categoría y sitio
+    const buscarInventario = `
+      SELECT i.id_inventario, i.stock
+      FROM inventarios i
+      JOIN elementos e ON i.fk_elemento = e.id_elemento
+      WHERE i.fk_sitio = $1 AND e.fk_categoria = $2
+    `;
+
+    const inventarioExistente = await pool.query(buscarInventario, [fk_sitio, categoria]);
+
+    if (inventarioExistente.rowCount > 0) {
+      // Ya hay un inventario con un elemento de esa categoría, actualizar stock
+      const { id_inventario, stock: stockActual } = inventarioExistente.rows[0];
+      const nuevoStock = stockActual + stock;
+
+      const actualizarStock = `
+        UPDATE inventarios
+        SET stock = $1, updated_at = NOW()
+        WHERE id_inventario = $2
+      `;
+
+      await pool.query(actualizarStock, [nuevoStock, id_inventario]);
+
+      return res.status(200).json({ message: "Stock actualizado correctamente" });
     } else {
-      return res
-        .status(400)
-        .json({
-          message: "No fue posible registrar el elemnento en el inventario",
-        });
+      // No existe inventario para esa categoría en ese sitio, crear uno nuevo
+      const insertarInventario = `
+        INSERT INTO inventarios (stock, estado, fk_sitio, fk_elemento)
+        VALUES ($1, $2, $3, $4)
+      `;
+
+      await pool.query(insertarInventario, [stock, estado, fk_sitio, fk_elemento]);
+
+      return res.status(201).json({ message: "Elemento agregado correctamente al inventario" });
     }
   } catch (error) {
-    console.log(
-      "Error al registrar elementos al inventario en el sistema " +
-        error.message
-    );
-    return res
-      .status(500)
-      .json({
-        message: "Error al registrar elementos al inventario en el sistema",
-      });
+    console.log("Error al registrar elementos al inventario: " + error.message);
+    return res.status(500).json({ message: "Error en el servidor al registrar el inventario" });
   }
 };
 
@@ -126,7 +147,19 @@ export const reporteInventario = async (req, res) => {
 
 export const stockInventario = async (req, res) => {
   try {
-    const sql = `SELECT s.nombre AS sitio, e.nombre AS elemento, i.stock FROM inventarios i JOIN sitios s ON i.fk_sitio = s.id_sitio JOIN elementos e ON i.fk_elemento = e.id_elemento`;
+    const sql = `SELECT 
+  s.nombre AS sitio, 
+  e.nombre AS nombre_elemento, 
+  i.stock 
+FROM 
+  inventarios i 
+JOIN 
+  sitios s ON i.fk_sitio = s.id_sitio 
+JOIN 
+  elementos e ON i.fk_elemento = e.id_elemento
+WHERE 
+  i.stock < 6 AND i.estado = true;`;
+
     const result = await pool.query(sql);
     if (result.rowCount === 0) {
       return res.status(200).json([]);
